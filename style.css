@@ -103,6 +103,31 @@ em {
 }
 
 /* =========================
+   ÍCONES SVG
+========================= */
+
+.icon {
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  vertical-align: middle;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+a > span[aria-hidden="true"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* =========================
    CABEÇALHO
 ========================= */
 
@@ -183,16 +208,65 @@ em {
 }
 
 .site-nav .nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   padding: 11px 18px;
   border: 1px solid #746443;
 }
 
-.nav-cta span {
-  margin-left: 12px;
-}
-
 .menu {
   display: none;
+}
+
+/* Hambúrguer desenhado com CSS */
+
+.menu-lines {
+  position: relative;
+  display: block;
+  width: 23px;
+  height: 18px;
+}
+
+.menu-lines span {
+  position: absolute;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease,
+    top 0.2s ease;
+}
+
+.menu-lines span:nth-child(1) {
+  top: 0;
+}
+
+.menu-lines span:nth-child(2) {
+  top: 8px;
+}
+
+.menu-lines span:nth-child(3) {
+  top: 16px;
+}
+
+.menu[aria-expanded="true"] .menu-lines span:nth-child(1) {
+  top: 8px;
+  transform: rotate(45deg);
+}
+
+.menu[aria-expanded="true"] .menu-lines span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu[aria-expanded="true"] .menu-lines span:nth-child(3) {
+  top: 8px;
+  transform: rotate(-45deg);
 }
 
 /* =========================
@@ -226,10 +300,12 @@ em {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 25px;
+  gap: 18px;
+  max-width: 100%;
   padding: 15px 23px;
   font-size: 14px;
   font-weight: 600;
+  line-height: 1.4;
   text-align: center;
   transition:
     background 0.2s ease,
@@ -364,6 +440,10 @@ em {
   font-size: 16px;
 }
 
+.topics-band > span {
+  text-align: center;
+}
+
 .topics-band b {
   font-size: 19px;
   font-weight: 400;
@@ -428,11 +508,13 @@ em {
 
 .card-link {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
   margin-top: auto;
   color: var(--gold);
   font-size: 14px;
+  line-height: 1.4;
 }
 
 .catalog {
@@ -537,6 +619,22 @@ em {
 
 .cta .button {
   flex-shrink: 0;
+}
+
+/* Botão menor e com texto curto */
+
+.cta .cta-button {
+  width: fit-content;
+  gap: 12px;
+  padding: 13px 20px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.cta-button .icon {
+  width: 18px;
+  height: 18px;
+  flex-basis: 18px;
 }
 
 /* =========================
@@ -659,7 +757,9 @@ em {
 ========================= */
 
 .back {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 35px;
   color: var(--muted);
   font-size: 14px;
@@ -855,15 +955,20 @@ em {
   }
 
   .menu {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 12px;
-    border: 1px solid var(--line);
-    background: none;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     color: var(--text);
-    font-size: 14px;
     cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   .site-nav {
@@ -895,6 +1000,7 @@ em {
   }
 
   .site-header {
+    gap: 12px;
     padding: 20px 6%;
   }
 
@@ -956,12 +1062,27 @@ em {
     font-size: 32px;
   }
 
+  /* Faixa dourada centralizada */
+
   .topics-band {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 20px;
-    padding: 20px 6%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    justify-items: center;
+    gap: 16px 12px;
+    padding: 24px 5%;
     font-size: 14px;
+    text-align: center;
+  }
+
+  .topics-band > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    line-height: 1.5;
+    text-align: center;
   }
 
   .topics-band b {
@@ -1017,6 +1138,7 @@ em {
   }
 
   .cta {
+    gap: 26px;
     padding: 45px 6%;
   }
 
@@ -1024,10 +1146,14 @@ em {
     font-size: 32px;
   }
 
-  .cta .button {
+  .cta .cta-button {
+    align-self: flex-start;
+    width: fit-content;
     max-width: 100%;
-    gap: 15px;
+    gap: 12px;
+    padding: 12px 18px;
     font-size: 14px;
+    line-height: 1.4;
   }
 
   .page-intro {
@@ -1090,26 +1216,63 @@ em {
     margin-top: 15px;
   }
 
+  /* Rodapé centralizado */
+
   .site-footer {
-    padding: 35px 6% 20px;
+    padding: 38px 6% 24px;
+    text-align: center;
   }
 
   .footer-top {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 28px;
+  }
+
+  .site-footer .brand {
+    justify-content: center;
   }
 
   .footer-top p {
     margin: 0;
+    text-align: center;
   }
 
   .footer-links {
-    gap: 18px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px 20px;
+    width: 100%;
+    text-align: center;
   }
 
   .footer-bottom {
     flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 24px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .site-header .brand {
+    gap: 9px;
+    font-size: 19px;
+  }
+
+  .site-header .brand small {
+    font-size: 7px;
+    letter-spacing: 0.14em;
+  }
+
+  .site-header .mark {
+    padding-right: 10px;
+    font-size: 39px;
   }
 }
 

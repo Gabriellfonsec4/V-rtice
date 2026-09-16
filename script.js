@@ -4,8 +4,6 @@
    CONFIGURAÇÕES
 ========================= */
 
-// Número comercial que aparece nos prints.
-// Formato: código do país + DDD + número, somente dígitos.
 const WHATSAPP = "5547974003572";
 
 const MENSAGEM_PADRAO =
@@ -15,6 +13,50 @@ const paginaAtual = document.body.dataset.pagina;
 
 const parametros = new URLSearchParams(window.location.search);
 const temaSelecionado = parametros.get("tema");
+
+/* =========================
+   ÍCONES SVG
+========================= */
+
+function criarIcone(tipo = "diagonal") {
+  const caminhos = {
+    diagonal: `
+      <path d="M7 17 17 7"></path>
+      <path d="M7 7h10v10"></path>
+    `,
+
+    direita: `
+      <path d="M4 12h16"></path>
+      <path d="m13 5 7 7-7 7"></path>
+    `,
+
+    esquerda: `
+      <path d="M20 12H4"></path>
+      <path d="m11 5-7 7 7 7"></path>
+    `,
+  };
+
+  const caminho = caminhos[tipo] || caminhos.diagonal;
+
+  return `
+    <svg
+      class="icon"
+      xmlns="http://www.w3.org/2000/svg"
+      width="19"
+      height="19"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      ${caminho}
+    </svg>
+  `;
+}
 
 /* =========================
    TREINAMENTOS
@@ -90,9 +132,14 @@ const treinamentoAtual = treinamentos.find(
    FAVICON
 ========================= */
 
-const favicon = document.createElement("link");
+let favicon = document.querySelector('link[rel="icon"]');
 
-favicon.rel = "icon";
+if (!favicon) {
+  favicon = document.createElement("link");
+  favicon.rel = "icon";
+  document.head.appendChild(favicon);
+}
+
 favicon.type = "image/svg+xml";
 
 favicon.href =
@@ -109,16 +156,26 @@ favicon.href =
     </svg>
   `);
 
-document.head.appendChild(favicon);
-
 /* =========================
    CABEÇALHO
 ========================= */
 
 const linksMenu = [
-  { id: "inicio", nome: "Início", url: "index.html" },
-  { id: "empresa", nome: "A empresa", url: "empresa.html" },
-  { id: "solucoes", nome: "Soluções", url: "solucoes.html" },
+  {
+    id: "inicio",
+    nome: "Início",
+    url: "index.html",
+  },
+  {
+    id: "empresa",
+    nome: "A empresa",
+    url: "empresa.html",
+  },
+  {
+    id: "solucoes",
+    nome: "Soluções",
+    url: "solucoes.html",
+  },
   {
     id: "treinamentos",
     nome: "Treinamentos",
@@ -170,8 +227,11 @@ if (cabecalho) {
         aria-expanded="false"
         aria-controls="menu-principal"
       >
-        Menu
-        <span aria-hidden="true">☰</span>
+        <span class="menu-lines" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
       </button>
 
       <nav
@@ -187,7 +247,7 @@ if (cabecalho) {
           ${paginaAtual === "contato" ? 'aria-current="page"' : ""}
         >
           Vamos conversar
-          <span aria-hidden="true">↗</span>
+          ${criarIcone("diagonal")}
         </a>
       </nav>
     </header>
@@ -264,8 +324,8 @@ function criarCard(treinamento) {
       <p>${treinamento.descricao}</p>
 
       <span class="card-link">
-        Explorar treinamento
-        <span aria-hidden="true">↗</span>
+        <span>Explorar treinamento</span>
+        ${criarIcone("diagonal")}
       </span>
     </a>
   `;
@@ -287,7 +347,9 @@ if (detalhe) {
       <section class="page-intro">
         <span class="eyebrow">Treinamentos</span>
 
-        <h1>Qual tema faz sentido para <em>sua equipe?</em></h1>
+        <h1>
+          Qual tema faz sentido para <em>sua equipe?</em>
+        </h1>
 
         <p>
           Escolha um treinamento para conhecer as possibilidades
@@ -296,7 +358,7 @@ if (detalhe) {
 
         <a class="button gold" href="treinamentos.html">
           Ver os treinamentos
-          <span aria-hidden="true">→</span>
+          ${criarIcone("direita")}
         </a>
       </section>
     `;
@@ -325,7 +387,8 @@ if (detalhe) {
     detalhe.innerHTML = `
       <section class="page-intro detail">
         <a class="back" href="treinamentos.html">
-          ← Todos os treinamentos
+          ${criarIcone("esquerda")}
+          Todos os treinamentos
         </a>
 
         <span class="eyebrow">
@@ -341,7 +404,7 @@ if (detalhe) {
           href="contato.html?tema=${treinamentoAtual.id}"
         >
           Conversar sobre este tema
-          <span aria-hidden="true">↗</span>
+          ${criarIcone("diagonal")}
         </a>
       </section>
 
@@ -382,9 +445,12 @@ document.querySelectorAll("[data-cta]").forEach((elemento) => {
         </h2>
       </div>
 
-      <a class="button gold" href="contato.html">
-        Conversar sobre um treinamento
-        <span aria-hidden="true">↗</span>
+      <a
+        class="button gold cta-button"
+        href="contato.html"
+      >
+        <span>Vamos conversar</span>
+        ${criarIcone("diagonal")}
       </a>
     </section>
   `;
@@ -410,7 +476,7 @@ if (textoTema && treinamentoAtual) {
 
 if (botaoContato && treinamentoAtual) {
   botaoContato.dataset.whatsapp =
-    `Olá! Gostaria de solicitar uma proposta de treinamento online ` +
+    "Olá! Gostaria de solicitar uma proposta de treinamento online " +
     `sobre ${treinamentoAtual.nome} para minha empresa.`;
 }
 
@@ -439,7 +505,10 @@ if (rodape) {
           Pessoas que transformam.
         </p>
 
-        <nav class="footer-links" aria-label="Links do rodapé">
+        <nav
+          class="footer-links"
+          aria-label="Links do rodapé"
+        >
           <a href="empresa.html">A empresa</a>
           <a href="solucoes.html">Soluções</a>
           <a href="treinamentos.html">Treinamentos</a>
@@ -448,9 +517,46 @@ if (rodape) {
       </div>
 
       <div class="footer-bottom">
-        <span>Vértice · Nome provisório para apresentação</span>
-        <span>Proposta de site por Gabriell Fonseca</span>
+        <span>
+          Vértice · Nome provisório para apresentação
+        </span>
+
+        <span>
+          Proposta de site por Gabriell Fonseca
+        </span>
       </div>
     </footer>
   `;
 }
+
+/* =========================
+   SETAS DOS ARQUIVOS HTML
+
+   Substitui os caracteres de seta
+   presentes nos HTML antigos por SVG.
+   Assim, não é preciso alterar os HTML.
+========================= */
+
+function substituirSetasDoHTML() {
+  const tipos = {
+    "↗": "diagonal",
+    "→": "direita",
+    "←": "esquerda",
+  };
+
+  const elementos = document.querySelectorAll('a span[aria-hidden="true"]');
+
+  elementos.forEach((elemento) => {
+    if (elemento.querySelector("svg")) return;
+
+    const simbolo = elemento.textContent.replace(/[\uFE0E\uFE0F]/g, "").trim();
+
+    const tipo = tipos[simbolo];
+
+    if (tipo) {
+      elemento.innerHTML = criarIcone(tipo);
+    }
+  });
+}
+
+substituirSetasDoHTML();
